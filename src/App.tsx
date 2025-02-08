@@ -5,7 +5,7 @@
  * @format
  */
 
-import React  from 'react';
+import React from 'react';
 import {
   SafeAreaView,
   useColorScheme,
@@ -13,6 +13,7 @@ import {
   StyleSheet,
   View,
   Button,
+  Image,
 } from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Sound from 'react-native-sound';
@@ -39,10 +40,18 @@ function App(): React.JSX.Element {
         console.log('failed to load the sound', error);
         return;
       }
-      newSound.setNumberOfLoops(10000);
+      newSound.setNumberOfLoops(1);
       setSound(newSound);
       newSound.play(() => newSound.release());
     });
+
+    setTimeout(() => {
+      setIsAfter(false);
+      newSound.setNumberOfLoops(-1);
+      newSound.stop(() => {
+        console.log('Sound stopped');
+      });
+    }, 30000);
   };
 
   const stopSound = () => {
@@ -56,6 +65,13 @@ function App(): React.JSX.Element {
   return (
     <SafeAreaView style={[backgroundStyle, styles.main_container]}>
       <View style={styles.main_container}>
+        {isAfter && (
+          <Image
+            style={styles.image_styles}
+            source={require('../public/assets/Michael.png')}
+          />
+        )}
+
         <Text
           style={[
             text_color_styles,
@@ -90,6 +106,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 20,
+  },
+
+  image_styles: {
+    width: 200,
+    height: 200,
+    marginBottom: 10,
   },
 });
 
